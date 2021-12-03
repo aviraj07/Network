@@ -1,0 +1,46 @@
+{% extends "network/layout.html" %}
+{% load static %}
+{% block body %}
+        <center><h1 style="display: inline-block;">{{name}}&nbsp;&nbsp;</h1>
+        {% if owner %}
+        {% if alreadyFollow %}
+        <button type="button" class="btn btn-light" id="unfollow">Unfollow</button>
+        {% else %}
+        <button type="button" class="btn btn-primary" id="follow">Follow</button>
+        {% endif %}
+        {% endif %}</center>
+        <br>
+        <center>
+            <div style="display: inline-block;">
+                <span style="border:1px solid black; padding: 5px; margin:5px">Follower(s):&nbsp;&nbsp;{{followers}}</span>
+            </div> 
+            <div style="display: inline-block;">
+                <span style="border:1px solid black; padding: 5px; margin:5px">Following:&nbsp;&nbsp;{{following}}</span>
+            </div>   
+        </center>
+        
+        
+{% for posts in page.object_list %}
+    <div style="border: 1px solid gray;padding: 25px; margin: 25px;">
+    <strong><a href="{% url 'profile' posts.user %}">{{posts.user}}</a></strong>
+    <br>
+    {% if posts.user == request.user %}
+    <a href="#">Edit</a>
+    {% endif %}
+    <div>{{posts.content}}</div>
+    <div style="color: gray;">{{posts.date}}</div>
+    <div id="like">Like(s): {{posts.likes}}</div>
+    </div>    
+    {% endfor%}
+    <center>
+        <div class="page-links">
+        {% if page.has_previous %}
+        <a href="{% url 'profile' request.user.username %}?page={{ page.previous_page_number }}">Previous Page</a>&nbsp;&nbsp;
+        {% endif %}
+        {% if page.has_next %}
+        <a href="{% url 'profile' request.user.username %}?page={{ page.next_page_number }}">Next page</a>
+        {% endif %}
+    </div> 
+    </center>s
+
+{% endblock %}

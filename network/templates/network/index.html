@@ -1,0 +1,79 @@
+{% extends "network/layout.html" %}
+
+{% block body %}
+    {% if profil %}
+    <center><h1 style="display: inline-block;">{{name}}&nbsp;&nbsp;</h1>
+        {% if owner %}
+        {% if alreadyFollow %}
+        <button type="button" class="btn btn-light" id="unfollow">Unfollow</button>
+        {% else %}
+        <button type="button" class="btn btn-primary" id="follow">Follow</button>
+        {% endif %}
+        {% endif %}</center>
+        <br>
+        <center>
+            <div style="display: inline-block;">
+                <span style="border:1px solid black; padding: 5px; margin:5px">Follower(s):&nbsp;&nbsp;{{followers}}</span>
+            </div> 
+            <div style="display: inline-block;">
+                <span style="border:1px solid black; padding: 5px; margin:5px">Following:&nbsp;&nbsp;{{following}}</span>
+            </div>   
+        </center>
+        
+
+    {% endif %}
+
+    {% if followes%}
+    <h1><strong>All Posts Of Followings</strong></h1>
+    {% endif %}
+    {% if indice %}
+    <h1><strong>All Posts</strong></h1>
+    {% if user.is_authenticated %}
+    <div style="border: 1px solid gray;padding: 25px; margin: 25px;" id="NewPost">
+        
+        <form action="{% url 'index' %}" method="post">
+            {% csrf_token %}
+           <div class="input-group">
+                <span class="input-group-text">New Post: </span>
+                <textarea class="form-control" aria-label="With textarea" autofocus name="Newpost"></textarea>
+            </div>
+            <button class="btn btn-primary" type="submit">Post</button>
+        </form>  
+        {% endif %}  
+    </div>
+    {% endif %}
+
+    {% for posts in page.object_list %}
+    <div style="border: 1px solid gray;padding: 25px; margin: 25px;" id="post-{{posts.id}}">
+    <div id="content-{{posts.id}}">
+        
+       
+    <strong><a href="{% url 'profile' posts.user %}">{{posts.user}}</a></strong>
+    <br>
+    {% if posts.user == request.user %}
+    <button type="button" class="btn btn-link" data-id="{{posts.id}}" onclick="hide_post(this)">Edit</button>
+    {% endif %}
+    <div id="value-{{posts.id}}">{{posts.content}}</div>
+    <div style="color: gray;">{{posts.date}}</div>
+    <span id="like-{{posts.id}}">{{posts.likes}}</span>&nbsp;&nbsp; 
+    {% if posts.id not in likees %}
+    <button type="button" id="button-{{posts.id}}" class="btn btn-primary" data-postid="{{posts.id}}" onclick="liked(this)">Like</button>
+    {% else %}
+    <button type="button" class="btn btn-primary" onclick="liked(this)" id="button-{{posts.id}}" data-postid="{{posts.id}}">Unlike</button>
+    {% endif %}
+    </div> 
+    </div>     
+    {% endfor%}
+    <center>
+        <div class="page-links">
+        {% if page.has_previous %}
+        <a href="{% url 'index' %}?page={{ page.previous_page_number }}">Previous Page</a>&nbsp;&nbsp;
+        {% endif %}
+        {% if page.has_next %}
+        <a href="{% url 'index' %}?page={{ page.next_page_number }}">Next page</a>
+        {% endif %}
+    </div> 
+    </center>
+       
+
+{% endblock %}

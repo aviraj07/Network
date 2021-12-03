@@ -1,0 +1,25 @@
+{% extends "network/layout.html" %}
+
+{% block body %}
+    <h1><strong>All Posts</strong></h1>
+    {% for posts in page.object_list %}
+    <div style="border: 1px solid gray;padding: 25px; margin: 25px;">
+    <strong><a href="{% url 'profile' posts.user %}">{{posts.user}}</a></strong>
+    <br><br>
+    <div>{{posts.content}}</div>
+    <div style="color: gray;">{{posts.date}}</div>
+    <div id="like">Like(s): {{posts.likes}}</div>
+    </div>    
+    {% endfor%}
+    <center>
+        <div class="page-links">
+        {% if page.has_previous %}
+        <a href="{% url 'following' %}?page={{ page.previous_page_number }}">Previous Page</a>&nbsp;&nbsp;
+        {% endif %}
+        {% if page.has_next %}
+        <a href="{% url 'following' %}?page={{ page.next_page_number }}">Next page</a>
+        {% endif %}
+    </div> 
+    </center>    
+
+{% endblock %}
