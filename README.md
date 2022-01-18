@@ -34,6 +34,6 @@ Main files:
 There are other supporting files as well.
 
 
-![Preview](./ezgif.com-gif-maker.gif)
+![Preview](./ezgif.com-gif-maker(1).gif)
 
 
